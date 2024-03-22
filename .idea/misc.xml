@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/msclientes/msclientes/pom.xml" />
         <option value="$PROJECT_DIR$/eurekaserver/eurekaserver/pom.xml" />
         <option value="$PROJECT_DIR$/mscloudgateway/pom.xml" />
+        <option value="$PROJECT_DIR$/mscartoes/pom.xml" />
       </list>
     </option>
     <option name="workspaceImportForciblyTurnedOn" value="true" />
