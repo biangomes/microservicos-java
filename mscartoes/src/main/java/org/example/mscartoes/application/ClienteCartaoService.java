@@ -12,4 +12,7 @@ import java.util.List;
 public class ClienteCartaoService {
     private ClienteCartaoRepository repository;
 
+    public List<ClienteCartao> listCartoesByCpf(String cpf) {
+        return repository.findClienteCartaoByCpf(cpf);
+    }
 }
