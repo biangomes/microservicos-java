@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,11 +39,11 @@ public class CartaoResource {
     }
 
     @GetMapping(params = "cpf")
-    public ResponseEntity<List<CartoesPorClienteResponse>> getCartoesByCliente(@RequestParam("cpf") String cpf) {
+    public ResponseEntity<List<CartoesPorClienteResponse>> getCartoesByCliente(@RequestParam("cpf") String cpf) throws Exception {
         // Chama o metodo do Service normalmente
-        List<ClienteCartao> clienteCartaos = clienteCartaoService.listCartoesByCpf(cpf);
+        Optional<List<ClienteCartao>> clienteCartaos = clienteCartaoService.listCartoesByCpf(cpf);
         // Entendo que aqui seria uma "conversao" entre o DTO e o proprio model
-        List<CartoesPorClienteResponse> resultList = clienteCartaos.stream()
+        List<CartoesPorClienteResponse> resultList = clienteCartaos.get().stream()
                 .map(CartoesPorClienteResponse::fromModel)
                 .collect(Collectors.toList());
 
