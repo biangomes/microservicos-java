@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/eurekaserver/eurekaserver/pom.xml" />
         <option value="$PROJECT_DIR$/mscloudgateway/pom.xml" />
         <option value="$PROJECT_DIR$/mscartoes/pom.xml" />
+        <option value="$PROJECT_DIR$/msavaliadorcredito/pom.xml" />
       </list>
     </option>
     <option name="workspaceImportForciblyTurnedOn" value="true" />
