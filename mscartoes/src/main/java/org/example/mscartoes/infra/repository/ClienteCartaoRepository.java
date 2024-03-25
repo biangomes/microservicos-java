@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClienteCartaoRepository extends JpaRepository<ClienteCartao, Long> {
-    Optional<List<ClienteCartao>> findClienteCartaoByCpf(String cpf);
+    List<ClienteCartao> findClienteCartaoByCpf(String cpf);
 }

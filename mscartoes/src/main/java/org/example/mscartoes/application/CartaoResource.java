@@ -41,9 +41,9 @@ public class CartaoResource {
     @GetMapping(params = "cpf")
     public ResponseEntity<List<CartoesPorClienteResponse>> getCartoesByCliente(@RequestParam("cpf") String cpf) throws Exception {
         // Chama o metodo do Service normalmente
-        Optional<List<ClienteCartao>> clienteCartaos = clienteCartaoService.listCartoesByCpf(cpf);
+        List<ClienteCartao> clienteCartaos = clienteCartaoService.listCartoesByCpf(cpf);
         // Entendo que aqui seria uma "conversao" entre o DTO e o proprio model
-        List<CartoesPorClienteResponse> resultList = clienteCartaos.get().stream()
+        List<CartoesPorClienteResponse> resultList = clienteCartaos.stream()
                 .map(CartoesPorClienteResponse::fromModel)
                 .collect(Collectors.toList());
 

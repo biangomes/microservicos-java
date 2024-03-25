@@ -11,13 +11,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ClienteCartaoService {
-    private ClienteCartaoRepository repository;
+    private final ClienteCartaoRepository repository;
 
-    public Optional<List<ClienteCartao>> listCartoesByCpf(String cpf) throws Exception {
-        Optional<List<ClienteCartao>> result = repository.findClienteCartaoByCpf(cpf);
-        if (result.isEmpty()) {
-            throw new Exception(String.format("Cliente com cpf %s não possui cartao cadastrado", cpf));
-        }
+    public List<ClienteCartao> listCartoesByCpf(String cpf) throws Exception {
+        List<ClienteCartao> result = repository.findClienteCartaoByCpf(cpf);
+
         return result;
     }
 }
