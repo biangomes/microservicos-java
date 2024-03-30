@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 @Data
 public class CartaoAprovado {
-    private String nomeCartao;
+    private String cartao;
     private String bandeira;
     private BigDecimal limiteAprovado;
 }
