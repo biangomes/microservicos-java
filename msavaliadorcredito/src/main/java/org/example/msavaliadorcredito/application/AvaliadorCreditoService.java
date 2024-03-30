@@ -6,6 +6,7 @@ import org.example.msavaliadorcredito.application.exceptions.DadosClienteNotFoun
 import org.example.msavaliadorcredito.application.exceptions.ErroComunicacaoMicrosservicesException;
 import org.example.msavaliadorcredito.domain.model.CartaoCliente;
 import org.example.msavaliadorcredito.domain.model.DadosCliente;
+import org.example.msavaliadorcredito.domain.model.RetornoAvaliacaoCliente;
 import org.example.msavaliadorcredito.domain.model.SituacaoCliente;
 import org.example.msavaliadorcredito.infra.clients.CartoesResourceClient;
 import org.example.msavaliadorcredito.infra.clients.ClienteResourceClient;
@@ -33,6 +34,20 @@ public class AvaliadorCreditoService {
               .cliente(dadosClienteResponse.getBody())
               .cartoes(cartoesResponse.getBody())
               .build();
+    } catch (FeignException.FeignClientException e) {
+      int status = e.status();
+      if (HttpStatus.NOT_FOUND.value() == status) {
+        throw new DadosClienteNotFoundException();
+      }
+      throw new ErroComunicacaoMicrosservicesException(e.getMessage(), status);
+    }
+  }
+
+  public RetornoAvaliacaoCliente realizarAvaliacao(String cpf, Long renda)
+    throws DadosClienteNotFoundException, ErroComunicacaoMicrosservicesException {
+    try {
+      ResponseEntity<DadosCliente> dadosCliente = clientesClient.dadosCliente(cpf);
+      return null;
     } catch (FeignException.FeignClientException e) {
       int status = e.status();
       if (HttpStatus.NOT_FOUND.value() == status) {
