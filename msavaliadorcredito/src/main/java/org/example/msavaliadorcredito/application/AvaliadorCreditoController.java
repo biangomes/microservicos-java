@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/avaliacoes-credito")
+@RequestMapping("/v1/avaliacoes-credito")
 @RequiredArgsConstructor
 public class AvaliadorCreditoController {
 
@@ -37,6 +37,7 @@ public class AvaliadorCreditoController {
       return ResponseEntity.ok(situacaoCliente);
   }
 
+  @PostMapping
   public ResponseEntity realizarAvaliacao(@RequestBody DadosAvaliacao dados)
     throws DadosClienteNotFoundException, ErroComunicacaoMicrosservicesException {
       RetornoAvaliacaoCliente retorno = null;
