@@ -1,11 +1,9 @@
 package org.example.msavaliadorcredito.application;
 
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.example.msavaliadorcredito.application.exceptions.DadosClienteNotFoundException;
 import org.example.msavaliadorcredito.application.exceptions.ErroComunicacaoMicrosservicesException;
 import org.example.msavaliadorcredito.domain.model.DadosAvaliacao;
-import org.example.msavaliadorcredito.domain.model.DadosCliente;
 import org.example.msavaliadorcredito.domain.model.RetornoAvaliacaoCliente;
 import org.example.msavaliadorcredito.domain.model.SituacaoCliente;
 import org.springframework.http.HttpStatus;
@@ -40,14 +38,14 @@ public class AvaliadorCreditoController {
   @PostMapping
   public ResponseEntity realizarAvaliacao(@RequestBody DadosAvaliacao dados)
     throws DadosClienteNotFoundException, ErroComunicacaoMicrosservicesException {
-      RetornoAvaliacaoCliente retorno = null;
       try {
-          retorno = avaliadorCreditoService.realizarAvaliacao(dados.getCpf(), dados.getRenda());
+          RetornoAvaliacaoCliente retornoCliente = avaliadorCreditoService
+              .realizarAvaliacao(dados.getCpf(), dados.getRenda());
+          return ResponseEntity.ok(retornoCliente);
       } catch (DadosClienteNotFoundException e) {
           throw new RuntimeException(e);
       } catch (ErroComunicacaoMicrosservicesException e) {
           return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
       }
-      return ResponseEntity.ok(retorno);
   }
 }

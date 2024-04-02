@@ -8,4 +8,5 @@ public class DadosCliente {
   // equivalente aos DTOs
   private Long id;
   private String nome;
+  private Integer idade;
 }
