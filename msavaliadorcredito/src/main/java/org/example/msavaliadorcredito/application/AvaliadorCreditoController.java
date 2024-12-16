@@ -24,15 +24,14 @@ public class AvaliadorCreditoController {
 
   @GetMapping(value = "/situacao", params = "cpf")
   public ResponseEntity consultaSituacaoCliente(@RequestParam("cpf") String cpf) {
-      SituacaoCliente situacaoCliente = null;
       try {
-          situacaoCliente = avaliadorCreditoService.obterSituacaoCliente(cpf);
+          SituacaoCliente situacaoCliente = avaliadorCreditoService.obterSituacaoCliente(cpf);
+          return ResponseEntity.ok(situacaoCliente);
       } catch (DadosClienteNotFoundException e) {
-          throw new RuntimeException(e);
+        return ResponseEntity.notFound().build();
       } catch (ErroComunicacaoMicrosservicesException e) {
-          return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
       }
-      return ResponseEntity.ok(situacaoCliente);
   }
 
   @PostMapping

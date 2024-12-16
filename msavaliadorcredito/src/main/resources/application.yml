@@ -2,7 +2,7 @@ spring:
   application:
     name: msavaliadorcredito
 server:
-  port: 0
+  port: 8888
 eureka:
   client:
     service-url:
