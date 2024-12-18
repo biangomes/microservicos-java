@@ -52,6 +52,7 @@ public class AvaliadorCreditoService {
       var listaDeCartoesAprovados = cartoes.stream().map(cartao -> {
 
         DadosCliente dadosCliente = dadosClienteResponse.getBody();
+
         BigDecimal limiteBasico = cartao.getLimiteBasico();
         BigDecimal idadeBd = BigDecimal.valueOf(dadosCliente.getIdade());
         var fator = idadeBd.divide(BigDecimal.valueOf(10));

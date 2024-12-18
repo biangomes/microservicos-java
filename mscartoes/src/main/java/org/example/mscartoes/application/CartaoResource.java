@@ -47,6 +47,6 @@ public class CartaoResource {
                 .map(CartoesPorClienteResponse::fromModel)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(resultList, HttpStatus.OK);
+        return ResponseEntity.ok(resultList);
     }
 }
