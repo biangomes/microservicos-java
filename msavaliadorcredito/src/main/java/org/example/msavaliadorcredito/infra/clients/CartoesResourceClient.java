@@ -13,6 +13,6 @@ import java.util.List;
 public interface CartoesResourceClient {
     @GetMapping(params = "cpf")
     ResponseEntity<List<CartaoCliente>> getCartoesByCliente(@RequestParam("cpf") String cpf);
-    @GetMapping(params = "renda")
+    @GetMapping(params = "renda", consumes = "application/json")
     ResponseEntity<List<Cartao>> getCartoesRendaAte(@RequestParam("renda") Long renda);
 }

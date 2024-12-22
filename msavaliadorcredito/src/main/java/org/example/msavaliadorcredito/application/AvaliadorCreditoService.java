@@ -7,6 +7,9 @@ import org.example.msavaliadorcredito.application.exceptions.ErroComunicacaoMicr
 import org.example.msavaliadorcredito.domain.model.*;
 import org.example.msavaliadorcredito.infra.clients.CartoesResourceClient;
 import org.example.msavaliadorcredito.infra.clients.ClienteResourceClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,8 +21,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AvaliadorCreditoService {
+  @Autowired
   private final ClienteResourceClient clientesClient;
+  @Autowired
   private final CartoesResourceClient cartoesClient;
+  private final Logger logger = LoggerFactory.getLogger(AvaliadorCreditoService.class);
 
   public SituacaoCliente obterSituacaoCliente(String cpf)
           throws DadosClienteNotFoundException, ErroComunicacaoMicrosservicesException {
@@ -45,8 +51,12 @@ public class AvaliadorCreditoService {
   public RetornoAvaliacaoCliente realizarAvaliacao(String cpf, Long renda)
     throws DadosClienteNotFoundException, ErroComunicacaoMicrosservicesException {
     try {
+      logger.info(String.format("Validando cliente com cpf {%s}", cpf));
       ResponseEntity<DadosCliente> dadosClienteResponse = clientesClient.dadosCliente(cpf);
+      logger.info(String.format("CPF: {%s} / Nome: {%s}", cpf, dadosClienteResponse.getBody().getNome()));
+      logger.info(String.format("Busca cartoes de renda ate: %s", renda));
       ResponseEntity<List<Cartao>> cartoesResponse = cartoesClient.getCartoesRendaAte(renda);
+      logger.info("Cartoes aptos: ", cartoesResponse.getBody().get(0));
 
       List<Cartao> cartoes = cartoesResponse.getBody();
       var listaDeCartoesAprovados = cartoes.stream().map(cartao -> {
@@ -68,6 +78,7 @@ public class AvaliadorCreditoService {
 
       return new RetornoAvaliacaoCliente(listaDeCartoesAprovados);
     } catch (FeignException.FeignClientException e) {
+      logger.error(e.getMessage());
       int status = e.status();
       if (HttpStatus.NOT_FOUND.value() == status) {
         throw new DadosClienteNotFoundException();

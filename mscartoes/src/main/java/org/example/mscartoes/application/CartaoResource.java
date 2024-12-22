@@ -32,7 +32,7 @@ public class CartaoResource {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/renda")
+    @GetMapping(value = "/renda", produces = "application/json")
     public ResponseEntity<List<Cartao>> getCartoesRendaAte(@RequestParam("renda") Long renda) {
         List<Cartao> list = cartaoService.getCartoesRendaMenorOuIgual(renda);
         return ResponseEntity.ok(list);
