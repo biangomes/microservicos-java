@@ -13,7 +13,7 @@ import java.util.List;
 @FeignClient(value = "mscartoes", path = "/v1/cartoes", configuration = OpenFeignConfig.class)
 public interface CartoesResourceClient {
     @GetMapping(params = "cpf")
-    ResponseEntity<List<CartaoCliente>> getCartoesByCliente(@RequestParam("cpf") String cpf);
+    List<CartaoCliente> getCartoesByCliente(@RequestParam("cpf") String cpf);
     @GetMapping(params = "renda", consumes = "application/json")
-    ResponseEntity<List<Cartao>> getCartoesRendaAte(@RequestParam("renda") Long renda);
+    List<Cartao> getCartoesRendaAte(@RequestParam("renda") Long renda);
 }

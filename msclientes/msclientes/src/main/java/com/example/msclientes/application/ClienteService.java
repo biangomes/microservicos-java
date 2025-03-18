@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,5 +27,10 @@ public class ClienteService {
 
     public List<Cliente> getAll() {
         return repo.findAll();
+    }
+
+    public void removeClienteById(Long id) {
+        var cliente = repo.findById(id).orElseThrow(() -> new EntityNotFoundException("Não existe cliente com ID " + id));
+        repo.delete(cliente);
     }
 }

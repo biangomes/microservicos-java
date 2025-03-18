@@ -58,7 +58,13 @@ public class ClienteResource {
 
     @GetMapping("/all")
     public ResponseEntity<List<Cliente>> clientes() {
-        List<Cliente> clientes = service.getAll();
+        var clientes = service.getAll();
         return new ResponseEntity(clientes, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity removeCliente(Long id) {
+        service.removeClienteById(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

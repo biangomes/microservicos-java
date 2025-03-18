@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "msclientes", path = "/v1/clientes")
+@FeignClient(value = "msclientes", path = "/v1/clientes", configuration = OpenFeignConfig.class)
 public interface ClienteResourceClient {
   @GetMapping(params = "cpf")
-  ResponseEntity<DadosCliente> dadosCliente(@RequestParam("cpf") String cpf);
+  DadosCliente dadosCliente(@RequestParam("cpf") String cpf);
 
 }
