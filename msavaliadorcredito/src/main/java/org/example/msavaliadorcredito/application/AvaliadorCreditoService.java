@@ -31,13 +31,13 @@ public class AvaliadorCreditoService {
           throws DadosClienteNotFoundException, ErroComunicacaoMicrosservicesException {
     try {
       // obterDadosClientes (msclientes)
-      ResponseEntity<DadosCliente> dadosClienteResponse = clientesClient.dadosCliente(cpf);
-      ResponseEntity<List<CartaoCliente>> cartoesResponse = cartoesClient.getCartoesByCliente(cpf);
+      var dadosClienteResponse = clientesClient.dadosCliente(cpf);
+      var cartoesResponse = cartoesClient.getCartoesByCliente(cpf);
 
       // obter cartoes do cliente (mscartoes)
       return SituacaoCliente.builder()
-              .cliente(dadosClienteResponse.getBody())
-              .cartoes(cartoesResponse.getBody())
+              .cliente(dadosClienteResponse)
+              .cartoes(cartoesResponse)
               .build();
     } catch (FeignException.FeignClientException e) {
       int status = e.status();
@@ -52,23 +52,23 @@ public class AvaliadorCreditoService {
     throws DadosClienteNotFoundException, ErroComunicacaoMicrosservicesException {
     try {
       logger.info(String.format("Validando cliente com cpf {%s}", cpf));
-      ResponseEntity<DadosCliente> dadosClienteResponse = clientesClient.dadosCliente(cpf);
-      logger.info(String.format("CPF: {%s} / Nome: {%s}", cpf, dadosClienteResponse.getBody().getNome()));
+      var dadosClienteResponse = clientesClient.dadosCliente(cpf);
+      logger.info(String.format("CPF: {%s} / Nome: {%s}", cpf, dadosClienteResponse.getNome()));
       logger.info(String.format("Busca cartoes de renda ate: %s", renda));
-      ResponseEntity<List<Cartao>> cartoesResponse = cartoesClient.getCartoesRendaAte(renda);
-      logger.info("Cartoes aptos: ", cartoesResponse.getBody().get(0));
+      var cartoesResponse = cartoesClient.getCartoesRendaAte(renda);
+      logger.info("Cartoes aptos: ", cartoesResponse.get(0));
 
-      List<Cartao> cartoes = cartoesResponse.getBody();
+      var cartoes = cartoesResponse;
       var listaDeCartoesAprovados = cartoes.stream().map(cartao -> {
 
-        DadosCliente dadosCliente = dadosClienteResponse.getBody();
+        var dadosCliente = dadosClienteResponse;
 
-        BigDecimal limiteBasico = cartao.getLimiteBasico();
-        BigDecimal idadeBd = BigDecimal.valueOf(dadosCliente.getIdade());
+        var limiteBasico = cartao.getLimiteBasico();
+        var idadeBd = BigDecimal.valueOf(dadosCliente.getIdade());
         var fator = idadeBd.divide(BigDecimal.valueOf(10));
-        BigDecimal limiteAprovado = fator.multiply(limiteBasico);
+        var limiteAprovado = fator.multiply(limiteBasico);
 
-        CartaoAprovado aprovado = new CartaoAprovado();
+        var aprovado = new CartaoAprovado();
         aprovado.setCartao(cartao.getNome());
         aprovado.setBandeira(cartao.getBandeira());
         aprovado.setLimiteAprovado(limiteAprovado);
@@ -79,7 +79,7 @@ public class AvaliadorCreditoService {
       return new RetornoAvaliacaoCliente(listaDeCartoesAprovados);
     } catch (FeignException.FeignClientException e) {
       logger.error(e.getMessage());
-      int status = e.status();
+      var status = e.status();
       if (HttpStatus.NOT_FOUND.value() == status) {
         throw new DadosClienteNotFoundException();
       }
