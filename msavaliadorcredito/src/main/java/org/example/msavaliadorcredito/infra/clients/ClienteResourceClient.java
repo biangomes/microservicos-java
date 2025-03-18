@@ -3,6 +3,7 @@ package org.example.msavaliadorcredito.infra.clients;
 // Cliente do mscliente
 
 import org.example.msavaliadorcredito.domain.model.DadosCliente;
+import org.example.msavaliadorcredito.infra.config.OpenFeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
