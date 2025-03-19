@@ -1,12 +1,15 @@
 package org.example.msavaliadorcredito.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.example.msavaliadorcredito.application.exceptions.DadosClienteNotFoundException;
 import org.example.msavaliadorcredito.application.exceptions.ErroComunicacaoMicrosservicesException;
+import org.example.msavaliadorcredito.application.exceptions.SolicitacaoCartaoException;
 import org.example.msavaliadorcredito.domain.model.*;
 import org.example.msavaliadorcredito.infra.clients.CartoesResourceClient;
 import org.example.msavaliadorcredito.infra.clients.ClienteResourceClient;
+import org.example.msavaliadorcredito.infra.mqueue.SolicitacaoEmissaoCartaoPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +29,7 @@ public class AvaliadorCreditoService {
   private final ClienteResourceClient clientesClient;
   @Autowired
   private final CartoesResourceClient cartoesClient;
+  private final SolicitacaoEmissaoCartaoPublisher emissaoCartaoPublisher;
   private final Logger logger = LoggerFactory.getLogger(AvaliadorCreditoService.class);
 
   public SituacaoCliente obterSituacaoCliente(String cpf)
@@ -84,6 +89,16 @@ public class AvaliadorCreditoService {
         throw new DadosClienteNotFoundException();
       }
       throw new ErroComunicacaoMicrosservicesException(e.getMessage(), status);
+    }
+  }
+
+  public ProtocoloSolicitacaoCartao solicitarEmissaoCartao(DadosSolicitacaoEmissaoCartao dados) {
+    try {
+      emissaoCartaoPublisher.solicitarCartao(dados);
+      var protocolo = UUID.randomUUID().toString();
+      return new ProtocoloSolicitacaoCartao(protocolo);
+    } catch (Exception e) {
+      throw new SolicitacaoCartaoException(e.getMessage());
     }
   }
 }
